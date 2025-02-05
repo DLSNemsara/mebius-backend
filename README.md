@@ -4,7 +4,7 @@ This repository contains the backend code for the **Mebius eCommerce** project. 
 
 ## Features
 
-- **User authentication & authorization** (JWT-based)
+- **User authentication & authorization**
 - **Product & Category management** (CRUD operations)
 - **Shopping cart & order processing**
 - **Secure API endpoints**
@@ -16,10 +16,8 @@ This repository contains the backend code for the **Mebius eCommerce** project. 
 - **Node.js** for the backend runtime
 - **Express.js** for the backend framework
 - **MongoDB & Mongoose** for database management
-- **JWT (JSON Web Tokens)** for authentication
 - **Dotenv** for environment variable management
 - **Bcrypt** for password hashing
-- **Multer** for file uploads (if applicable)
 
 ## Getting Started
 
@@ -37,9 +35,8 @@ This repository contains the backend code for the **Mebius eCommerce** project. 
    ```
 4. Set up environment variables (`.env` file):
    ```
-   PORT=5000
+   PORT=8000
    MONGO_URI=your_mongodb_connection_string
-   JWT_SECRET=your_secret_key
    ```
 5. Start the server:
    ```sh
