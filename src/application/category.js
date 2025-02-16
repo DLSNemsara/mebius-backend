@@ -79,7 +79,7 @@ const products = [
 export const getCategories = async (req, res, next) => {
   try {
     const data = await Category.find();
-    return res.status(200).json(data).send();
+    return res.status(200).json(data);
   } catch (error) {
     next(error);
   }
@@ -101,7 +101,7 @@ export const getCategory = async (req, res, next) => {
     if (!category) {
       throw new NotFoundError("Category not found");
     }
-    return res.status(200).json(category).send();
+    return res.status(200).json(category);
   } catch (error) {
     next(error);
   }

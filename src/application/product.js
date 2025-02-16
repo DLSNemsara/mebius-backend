@@ -75,13 +75,14 @@ const products = [
       "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quas, sequi?",
   },
 ];
+
 // Get all products
 export const getProducts = async (req, res, next) => {
   try {
     const { categoryId } = req.query;
     if (!categoryId) {
       const data = await Product.find();
-      return res.status(200).json(data).send();
+      return res.status(200).json(data);
     }
     const data = await Product.find({ categoryId });
     return res.status(200).json(data).send();
