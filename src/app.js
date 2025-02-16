@@ -4,9 +4,11 @@ import globalErrorHandlingMiddleware from "./api/middleware/global-error-handlin
 import { connectDB } from "./infrastructure/db.js";
 import { categoryRouter } from "./api/category.js";
 import "dotenv/config";
+import cors from "cors";
 
 const app = express();
-app.use(express.json()); // For parsing JSON requests
+app.use(express.json());
+app.use(cors({ origin: "http://localhost:5173" }));
 
 app.use((req, res, next) => {
   console.log("Request received");
