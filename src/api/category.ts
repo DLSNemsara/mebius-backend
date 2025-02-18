@@ -1,11 +1,11 @@
 import express from "express";
 import {
-  getCategories,
   createCategory,
-  getCategory,
   deleteCategory,
   updateCategory,
-} from "../application/category.js";
+  getCategories,
+  getCategory,
+} from "../application/category";
 
 export const categoryRouter = express.Router();
 
