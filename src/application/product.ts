@@ -100,20 +100,7 @@ export const getProducts = async (
     next(error);
   }
 };
-// Create a product
-// export const createProduct = async (
-//   req: Request,
-//   res: Response,
-//   next: NextFunction
-// ) => {
-//   try {
-//     await Product.create(req.body);
-//     res.status(201).send();
-//     return;
-//   } catch (error) {
-//     next(error);
-//   }
-// };
+
 export const createProduct = async (
   req: Request,
   res: Response,
