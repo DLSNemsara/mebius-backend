@@ -11,8 +11,15 @@ import cors from "cors";
 
 const app = express();
 app.use(express.json());
-app.use(cors({ origin: "http://localhost:5173" }));
 app.use(clerkMiddleware());
+app.use(
+  cors({
+    origin: [
+      "https://mebius-frontend-sinel.netlify.app/",
+      "http://localhost:5173", // Allow local testing
+    ],
+  })
+);
 
 app.use("/api/products", productRouter);
 app.use("/api/categories", categoryRouter);
