@@ -15,12 +15,16 @@ app.use(clerkMiddleware());
 app.use(
   cors({
     origin: [
-      "https://mebius-frontend-sinel.netlify.app/",
-      "http://localhost:5173", // Allow local testing
+      "https://mebius-frontend-sinel.netlify.app",
+      "http://localhost:5173", // For local testing
     ],
+    methods: "GET,POST,PUT,DELETE",
+    allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: true,
   })
 );
 
+app.options("*", cors()); // Enable CORS for preflight requests
 app.use("/api/products", productRouter);
 app.use("/api/categories", categoryRouter);
 app.use("/api/orders", orderRouter);
