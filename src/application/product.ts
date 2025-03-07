@@ -193,7 +193,7 @@ export const checkStock = async (
       throw new NotFoundError("Product not found");
     }
 
-    const hasStock = product.hasStock(Number(quantity));
+    const hasStock = product.stock >= Number(quantity);
     res.status(200).json({
       hasStock,
       availableStock: product.stock,
