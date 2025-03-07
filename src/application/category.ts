@@ -27,7 +27,7 @@ export const createCategory = async (
   next: NextFunction
 ) => {
   try {
-    // const result:CategoryDTO = (req.body); //Only compile time even if its wronng type in req.body
+    // const result:CategoryDTO = (req.body); //Only compile time even if its wrong type in req.body
     const result = CategoryDTO.safeParse(req.body);
     if (!result.success) {
       throw new ValidationError("Invalid category data");
