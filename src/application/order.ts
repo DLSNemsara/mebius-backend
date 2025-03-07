@@ -70,6 +70,9 @@ export const createOrder = async (
     // Update stock for each product
     for (const item of result.data.items) {
       const product = await Product.findById(item.product._id).session(session);
+      if (!product) {
+        throw new NotFoundError(`Product ${item.product._id} not found`);
+      }
       await product.decreaseStock(item.quantity);
     }
 
