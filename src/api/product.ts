@@ -5,6 +5,7 @@ import {
   getProduct,
   deleteProduct,
   updateProduct,
+  checkStock,
 } from "../application/product";
 import { isAuthenticated } from "./middleware/authentication-middleware";
 import { isAdmin } from "./middleware/authorization-middleware";
@@ -14,11 +15,16 @@ export const productRouter = express.Router();
 productRouter
   .route("/")
   .get(getProducts)
-  // .post(isAuthenticated, isAdmin, createProduct); //Remove isAuthenticated and isAdmin for using with Postman
-  .post(createProduct); //Remove isAuthenticated and isAdmin for using with Postman
+  .post(isAuthenticated, isAdmin, createProduct);
+// .post(createProduct); //For local testing
 
 productRouter
   .route("/:id")
   .get(getProduct)
   .delete(isAuthenticated, isAdmin, deleteProduct)
   .patch(isAuthenticated, isAdmin, updateProduct);
+
+//For production environment
+// .delete(deleteProduct)
+// .patch(updateProduct);
+productRouter.route("/check-stock").get(checkStock);

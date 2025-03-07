@@ -118,6 +118,7 @@ export const createProduct = async (
     next(error);
   }
 };
+
 // Get a product by id
 export const getProduct = async (
   req: Request,
@@ -136,6 +137,7 @@ export const getProduct = async (
     next(error);
   }
 };
+
 // Delete a product
 export const deleteProduct = async (
   req: Request,
@@ -155,6 +157,7 @@ export const deleteProduct = async (
     next(error);
   }
 };
+
 // Update a product
 export const updateProduct = async (
   req: Request,
@@ -171,6 +174,30 @@ export const updateProduct = async (
 
     res.status(200).send(product);
     return;
+  } catch (error) {
+    next(error);
+  }
+};
+
+// Add this to your existing product.ts file
+export const checkStock = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { productId, quantity } = req.query;
+
+    const product = await Product.findById(productId);
+    if (!product) {
+      throw new NotFoundError("Product not found");
+    }
+
+    const hasStock = product.hasStock(Number(quantity));
+    res.status(200).json({
+      hasStock,
+      availableStock: product.stock,
+    });
   } catch (error) {
     next(error);
   }

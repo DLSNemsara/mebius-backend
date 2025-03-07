@@ -15,7 +15,7 @@ app.use(clerkMiddleware());
 app.use(
   cors({
     origin: [
-      "https://mebius-frontend-sinel.netlify.app",
+      "https://mebius-frontend-sinel.netlify.app", //For production environment
       "http://localhost:5173", // For local testing
     ],
     methods: "GET,POST,PUT,DELETE",
