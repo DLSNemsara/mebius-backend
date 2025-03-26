@@ -17,7 +17,7 @@ This repository contains the backend code for the **Mebius eCommerce** project. 
 - **Express.js** for the backend framework
 - **MongoDB & Mongoose** for database management
 - **Dotenv** for environment variable management
-- **Bcrypt** for password hashing
+- **Clerk** for authentication
 
 ## Getting Started
 
