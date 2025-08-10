@@ -6,19 +6,21 @@ export const handleWebhook = async (
   req: Request,
   res: Response,
   next: NextFunction
-) => {
+): Promise<void> => {
   try {
     const signature = req.headers["stripe-signature"] as string;
     const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
 
     if (!webhookSecret) {
       console.error("STRIPE_WEBHOOK_SECRET not configured");
-      return res.status(500).json({ error: "Webhook secret not configured" });
+      res.status(500).json({ error: "Webhook secret not configured" });
+      return;
     }
 
     if (!signature) {
       console.error("No Stripe signature found");
-      return res.status(400).json({ error: "No signature found" });
+      res.status(400).json({ error: "No signature found" });
+      return;
     }
 
     // Verify webhook signature
@@ -31,7 +33,8 @@ export const handleWebhook = async (
       );
     } catch (error) {
       console.error("Webhook signature verification failed:", error);
-      return res.status(400).json({ error: "Invalid signature" });
+      res.status(400).json({ error: "Invalid signature" });
+      return;
     }
 
     // Received webhook event

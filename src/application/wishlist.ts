@@ -13,11 +13,12 @@ export const getWishlist = async (
   req: Request,
   res: Response,
   next: NextFunction
-) => {
+): Promise<void> => {
   try {
     const userId = req.auth?.userId;
     if (!userId) {
-      return res.status(401).json({ error: "Authentication required" });
+      res.status(401).json({ error: "Authentication required" });
+      return;
     }
 
     const wishlistItems = await Wishlist.find({ userId })
@@ -45,11 +46,12 @@ export const addToWishlist = async (
   req: Request,
   res: Response,
   next: NextFunction
-) => {
+): Promise<void> => {
   try {
     const userId = req.auth?.userId;
     if (!userId) {
-      return res.status(401).json({ error: "Authentication required" });
+      res.status(401).json({ error: "Authentication required" });
+      return;
     }
 
     const result = AddToWishlistDTO.safeParse(req.body);
@@ -68,10 +70,11 @@ export const addToWishlist = async (
     // Check if item already exists in wishlist
     const existingItem = await Wishlist.findOne({ userId, productId });
     if (existingItem) {
-      return res.status(200).json({
+      res.status(200).json({
         message: "Item already in wishlist",
         wishlistItem: existingItem,
       });
+      return;
     }
 
     // Add to wishlist
@@ -104,11 +107,12 @@ export const removeFromWishlist = async (
   req: Request,
   res: Response,
   next: NextFunction
-) => {
+): Promise<void> => {
   try {
     const userId = req.auth?.userId;
     if (!userId) {
-      return res.status(401).json({ error: "Authentication required" });
+      res.status(401).json({ error: "Authentication required" });
+      return;
     }
 
     const result = RemoveFromWishlistDTO.safeParse(req.body);
@@ -138,11 +142,12 @@ export const checkWishlistStatus = async (
   req: Request,
   res: Response,
   next: NextFunction
-) => {
+): Promise<void> => {
   try {
     const userId = req.auth?.userId;
     if (!userId) {
-      return res.status(401).json({ error: "Authentication required" });
+      res.status(401).json({ error: "Authentication required" });
+      return;
     }
 
     const { productId } = req.params;
@@ -164,11 +169,12 @@ export const getWishlistCount = async (
   req: Request,
   res: Response,
   next: NextFunction
-) => {
+): Promise<void> => {
   try {
     const userId = req.auth?.userId;
     if (!userId) {
-      return res.status(401).json({ error: "Authentication required" });
+      res.status(401).json({ error: "Authentication required" });
+      return;
     }
 
     const count = await Wishlist.countDocuments({ userId });

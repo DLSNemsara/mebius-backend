@@ -86,7 +86,7 @@ export const getProducts = async (
   req: Request,
   res: Response,
   next: NextFunction
-) => {
+): Promise<void> => {
   try {
     const { categoryId } = req.query;
     if (!categoryId) {
@@ -103,11 +103,12 @@ export const getProducts = async (
   }
 };
 
+// Create a product
 export const createProduct = async (
   req: Request,
   res: Response,
   next: NextFunction
-) => {
+): Promise<void> => {
   try {
     const result = CreateProductDTO.safeParse(req.body);
     if (!result.success) {
@@ -170,7 +171,7 @@ export const getProductsByCategory = async (
   req: Request,
   res: Response,
   next: NextFunction
-) => {
+): Promise<void> => {
   try {
     const { categoryId } = req.params;
     const data = await Product.find({ categoryId }).populate("categoryId");
@@ -186,7 +187,7 @@ export const getProduct = async (
   req: Request,
   res: Response,
   next: NextFunction
-) => {
+): Promise<void> => {
   try {
     const id = req.params.id;
     const product = await Product.findById(id).populate("categoryId");
@@ -205,7 +206,7 @@ export const deleteProduct = async (
   req: Request,
   res: Response,
   next: NextFunction
-) => {
+): Promise<void> => {
   try {
     const id = req.params.id;
     const product = await Product.findByIdAndDelete(id);
@@ -225,7 +226,7 @@ export const updateProduct = async (
   req: Request,
   res: Response,
   next: NextFunction
-) => {
+): Promise<void> => {
   try {
     const id = req.params.id;
     const result = UpdateProductDTO.safeParse(req.body);
@@ -258,7 +259,7 @@ export const checkStock = async (
   req: Request,
   res: Response,
   next: NextFunction
-) => {
+): Promise<void> => {
   try {
     const { productId, quantity } = req.query;
     const product = await Product.findById(productId);

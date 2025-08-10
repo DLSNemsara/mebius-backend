@@ -13,7 +13,7 @@ export const createOrder = async (
   req: Request,
   res: Response,
   next: NextFunction
-) => {
+): Promise<void> => {
   // Start a transaction
   const session = await mongoose.startSession();
   session.startTransaction();
@@ -158,7 +158,7 @@ export const getOrder = async (
   req: Request,
   res: Response,
   next: NextFunction
-) => {
+): Promise<void> => {
   try {
     const id = req.params.id;
     const order = await Order.findById(id)
@@ -185,7 +185,7 @@ export const getUserOrders = async (
   req: Request,
   res: Response,
   next: NextFunction
-) => {
+): Promise<void> => {
   try {
     const userId = getAuth(req).userId;
     // For testing, use a dummy user ID
@@ -214,7 +214,7 @@ export const getAllOrders = async (
   req: Request,
   res: Response,
   next: NextFunction
-) => {
+): Promise<void> => {
   try {
     const { status, page = 1, limit = 20 } = req.query;
     const query: any = {};
@@ -253,7 +253,7 @@ export const updateOrderStatus = async (
   req: Request,
   res: Response,
   next: NextFunction
-) => {
+): Promise<void> => {
   try {
     const { id } = req.params;
     const { orderStatus, paymentStatus } = req.body;
@@ -288,7 +288,7 @@ export const getOrderStats = async (
   req: Request,
   res: Response,
   next: NextFunction
-) => {
+): Promise<void> => {
   try {
     const totalOrders = await Order.countDocuments();
     const pendingOrders = await Order.countDocuments({
