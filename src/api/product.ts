@@ -18,6 +18,8 @@ productRouter
   .post(isAuthenticated, isAdmin, createProduct);
 // .post(createProduct); //For local testing
 
+productRouter.route("/check-stock").get(checkStock);
+
 productRouter
   .route("/:id")
   .get(getProduct)
@@ -27,4 +29,3 @@ productRouter
 //For production environment
 // .delete(deleteProduct)
 // .patch(updateProduct);
-productRouter.route("/check-stock").get(checkStock);

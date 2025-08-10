@@ -21,4 +21,5 @@ export const CreateOrderDTO = z.object({
     zip_code: z.string(),
     phone: z.string(),
   }),
+  paymentMethod: z.enum(["COD", "CARD"]).default("COD"),
 });

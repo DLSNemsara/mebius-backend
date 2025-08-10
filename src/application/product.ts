@@ -1,8 +1,10 @@
 import NotFoundError from "../domain/errors/not-found-error";
 import Product from "../infrastructure/schemas/Product";
 import { Request, Response, NextFunction } from "express";
-import { CreateProductDTO } from "../domain/dto/product";
+import { CreateProductDTO, UpdateProductDTO } from "../domain/dto/product";
 import ValidationError from "../domain/errors/validation-error";
+import { getAuth } from "@clerk/express";
+import { StripeService } from "../infrastructure/stripe";
 
 const products = [
   {
@@ -109,10 +111,48 @@ export const createProduct = async (
   try {
     const result = CreateProductDTO.safeParse(req.body);
     if (!result.success) {
-      throw new ValidationError("Invalid product data");
+      console.error("Validation errors:", result.error.issues);
+      throw new ValidationError(
+        `Invalid product data: ${result.error.issues.map((i) => i.message).join(", ")}`
+      );
     }
-    await Product.create(result.data);
-    res.status(201).send();
+
+    // Handle legacy data conversion
+    const productData = { ...result.data };
+
+    // If legacy 'description' is provided but not shortDescription/detailedDescription
+    if (result.data.description && !result.data.shortDescription) {
+      productData.shortDescription = result.data.description.substring(0, 200);
+      productData.detailedDescription = result.data.description;
+    }
+
+    // If legacy 'image' is provided but not images array
+    if (
+      result.data.image &&
+      (!result.data.images || result.data.images.length === 0)
+    ) {
+      productData.images = [result.data.image];
+    }
+
+    // Create Stripe Product and Price
+    try {
+      const stripeData = await StripeService.createProductAndPrice(
+        productData.name,
+        productData.price,
+        productData.shortDescription
+      );
+
+      // Add Stripe IDs to product data
+      productData.stripeProductId = stripeData.productId;
+      productData.stripePriceId = stripeData.priceId;
+    } catch (stripeError) {
+      console.error("Failed to create Stripe product/price:", stripeError);
+      // Continue with product creation even if Stripe fails
+      // The product will be created without Stripe integration
+    }
+
+    const product = await Product.create(productData);
+    res.status(201).json(product);
     return;
   } catch (error) {
     next(error);
@@ -131,7 +171,7 @@ export const getProduct = async (
     if (!product) {
       throw new NotFoundError("Product not found");
     }
-    res.status(200).json(product).send();
+    res.status(200).json(product);
     return;
   } catch (error) {
     next(error);
@@ -166,20 +206,32 @@ export const updateProduct = async (
 ) => {
   try {
     const id = req.params.id;
-    const product = await Product.findByIdAndUpdate(id, req.body);
+    const result = UpdateProductDTO.safeParse(req.body);
+
+    if (!result.success) {
+      console.error("Validation errors:", result.error.issues);
+      throw new ValidationError(
+        `Invalid product data: ${result.error.issues.map((i) => i.message).join(", ")}`
+      );
+    }
+
+    const product = await Product.findByIdAndUpdate(id, result.data, {
+      new: true,
+      runValidators: true,
+    }).populate("categoryId");
 
     if (!product) {
       throw new NotFoundError("Product not found");
     }
 
-    res.status(200).send(product);
+    res.status(200).json(product);
     return;
   } catch (error) {
     next(error);
   }
 };
 
-// Add this to your existing product.ts file
+// To fetch the stocks
 export const checkStock = async (
   req: Request,
   res: Response,
