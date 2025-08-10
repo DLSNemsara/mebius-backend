@@ -3,4 +3,7 @@ import { handleWebhook } from "../application/payment";
 
 export const paymentsRouter = express.Router();
 
-paymentsRouter.route("/webhook").post(handleWebhook);
+// Webhook endpoint - needs raw body for signature verification
+paymentsRouter
+  .route("/webhook")
+  .post(express.raw({ type: "application/json" }), handleWebhook);

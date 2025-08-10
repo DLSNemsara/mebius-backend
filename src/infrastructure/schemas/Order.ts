@@ -13,30 +13,50 @@ const ItemSchema = new mongoose.Schema({
   quantity: { type: Number, required: true },
 });
 
-const OrderSchema = new mongoose.Schema({
-  userId: { type: String, required: true },
-  addressId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Address",
-    required: true,
+const OrderSchema = new mongoose.Schema(
+  {
+    userId: { type: String, required: true },
+    addressId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Address",
+      required: true,
+    },
+    items: {
+      type: [ItemSchema],
+      required: true,
+    },
+    orderStatus: {
+      type: String,
+      enum: ["PENDING", "CONFIRMED", "SHIPPED", "DELIVERED", "CANCELLED"],
+      default: "PENDING",
+      required: true,
+    },
+    paymentStatus: {
+      type: String,
+      enum: ["PENDING", "PAID", "FAILED"],
+      default: "PENDING",
+      required: true,
+    },
+    paymentMethod: {
+      type: String,
+      enum: ["COD", "CARD"],
+      default: "COD",
+      required: true,
+    },
+    // Stripe integration fields
+    stripePaymentIntentId: {
+      type: String,
+      required: false,
+    },
+    stripePaymentIntentStatus: {
+      type: String,
+      required: false,
+    },
   },
-  items: {
-    type: [ItemSchema],
-    required: true,
-  },
-  orderStatus: {
-    type: String,
-    enum: ["PENDING", "CONFIRMED", "SHIPPED", "DELIVERED", "CANCELLED"],
-    default: "PENDING",
-    required: true,
-  },
-  paymentStatus: {
-    type: String,
-    enum: ["PENDING", "PAID"],
-    default: "PENDING",
-    required: true,
-  },
-});
+  {
+    timestamps: true, // Automatically adds createdAt and updatedAt
+  }
+);
 
 const Order = mongoose.model("Order", OrderSchema);
 

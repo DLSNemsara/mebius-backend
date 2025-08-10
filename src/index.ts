@@ -4,6 +4,8 @@ import { productRouter } from "./api/product";
 import { categoryRouter } from "./api/category";
 import { orderRouter } from "./api/order";
 import { paymentsRouter } from "./api/payment";
+import wishlistRouter from "./api/wishlist";
+import { reviewRouter } from "./api/review";
 import globalErrorHandlingMiddleware from "./api/middleware/global-error-handling-middleware";
 import { clerkMiddleware } from "@clerk/express";
 import "dotenv/config";
@@ -18,7 +20,7 @@ app.use(
       "https://mebius-frontend-sinel.netlify.app", //For production environment
       "http://localhost:5173", // For local testing
     ],
-    methods: "GET,POST,PUT,DELETE",
+    methods: "GET,POST,PUT,PATCH,DELETE",
     allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true,
   })
@@ -29,6 +31,8 @@ app.use("/api/products", productRouter);
 app.use("/api/categories", categoryRouter);
 app.use("/api/orders", orderRouter);
 app.use("/api/payments", paymentsRouter);
+app.use("/api/wishlist", wishlistRouter);
+app.use("/api/reviews", reviewRouter);
 
 app.use(globalErrorHandlingMiddleware);
 

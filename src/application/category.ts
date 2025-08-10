@@ -91,7 +91,7 @@ export const updateCategory = async (
       throw new NotFoundError("Category not found");
     }
 
-    res.status(200).send(category);
+    res.status(200).json(category);
     return;
   } catch (error) {
     next(error);
