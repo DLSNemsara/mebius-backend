@@ -1,7 +1,8 @@
 {
   "scripts": {
     "dev": "nodemon src/index.ts",
-    "build": "tsc",
+    "build": "npm ci --only=production && npm run build:tsc",
+    "build:tsc": "tsc",
     "start": "NODE_OPTIONS='--max-old-space-size=2048' node dist/index.js"
   },
   "dependencies": {
