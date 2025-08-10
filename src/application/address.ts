@@ -23,6 +23,7 @@ export const createAddress = async (
     });
 
     res.status(201).json(address);
+    return;
   } catch (error) {
     next(error);
   }
@@ -42,6 +43,7 @@ export const getAddress = async (
     }
 
     res.status(200).json(address);
+    return;
   } catch (error) {
     next(error);
   }
@@ -68,6 +70,7 @@ export const updateAddress = async (
     }
 
     res.status(200).json(address);
+    return;
   } catch (error) {
     next(error);
   }

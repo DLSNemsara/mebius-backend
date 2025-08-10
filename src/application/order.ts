@@ -143,6 +143,7 @@ export const createOrder = async (
     }
 
     res.status(201).json(response);
+    return;
   } catch (error) {
     // Abort transaction on error
     await session.abortTransaction();
@@ -174,6 +175,7 @@ export const getOrder = async (
     }
 
     res.status(200).json(order);
+    return;
   } catch (error) {
     next(error);
   }
@@ -201,6 +203,7 @@ export const getUserOrders = async (
       .sort({ createdAt: -1 }); // Sort by newest first
 
     res.status(200).json(orders);
+    return;
   } catch (error) {
     next(error);
   }
@@ -240,6 +243,7 @@ export const getAllOrders = async (
         limit: Number(limit),
       },
     });
+    return;
   } catch (error) {
     next(error);
   }
@@ -270,7 +274,11 @@ export const updateOrderStatus = async (
       throw new NotFoundError("Order not found");
     }
 
-    res.status(200).json(order);
+    res.status(200).json({
+      message: "Order status updated successfully",
+      order,
+    });
+    return;
   } catch (error) {
     next(error);
   }
@@ -319,6 +327,7 @@ export const getOrderStats = async (
       cancelledOrders,
       totalRevenue,
     });
+    return;
   } catch (error) {
     next(error);
   }

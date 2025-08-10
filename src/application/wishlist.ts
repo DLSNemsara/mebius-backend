@@ -34,6 +34,7 @@ export const getWishlist = async (
     const validWishlistItems = wishlistItems.filter((item) => item.productId);
 
     res.status(200).json(validWishlistItems);
+    return;
   } catch (error) {
     next(error);
   }
@@ -92,6 +93,7 @@ export const addToWishlist = async (
       message: "Item added to wishlist",
       wishlistItem: populatedItem,
     });
+    return;
   } catch (error) {
     next(error);
   }
@@ -125,6 +127,7 @@ export const removeFromWishlist = async (
     res.status(200).json({
       message: "Item removed from wishlist",
     });
+    return;
   } catch (error) {
     next(error);
   }
@@ -150,6 +153,7 @@ export const checkWishlistStatus = async (
       isInWishlist: !!wishlistItem,
       wishlistItem: wishlistItem || null,
     });
+    return;
   } catch (error) {
     next(error);
   }
@@ -170,6 +174,7 @@ export const getWishlistCount = async (
     const count = await Wishlist.countDocuments({ userId });
 
     res.status(200).json({ count });
+    return;
   } catch (error) {
     next(error);
   }

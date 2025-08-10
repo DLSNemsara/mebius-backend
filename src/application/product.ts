@@ -143,16 +143,38 @@ export const createProduct = async (
       );
 
       // Add Stripe IDs to product data
-      productData.stripeProductId = stripeData.productId;
-      productData.stripePriceId = stripeData.priceId;
+      const productWithStripe = {
+        ...productData,
+        stripeProductId: stripeData.productId,
+        stripePriceId: stripeData.priceId,
+      };
+
+      const product = await Product.create(productWithStripe);
+      res.status(201).json(product);
+      return;
     } catch (stripeError) {
       console.error("Failed to create Stripe product/price:", stripeError);
       // Continue with product creation even if Stripe fails
       // The product will be created without Stripe integration
+      const product = await Product.create(productData);
+      res.status(201).json(product);
+      return;
     }
+  } catch (error) {
+    next(error);
+  }
+};
 
-    const product = await Product.create(productData);
-    res.status(201).json(product);
+// Get products by category
+export const getProductsByCategory = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { categoryId } = req.params;
+    const data = await Product.find({ categoryId }).populate("categoryId");
+    res.status(200).json(data);
     return;
   } catch (error) {
     next(error);
@@ -239,17 +261,17 @@ export const checkStock = async (
 ) => {
   try {
     const { productId, quantity } = req.query;
-
     const product = await Product.findById(productId);
     if (!product) {
       throw new NotFoundError("Product not found");
     }
-
-    const hasStock = product.stock >= Number(quantity);
+    const isInStock = product.stock >= Number(quantity);
     res.status(200).json({
-      hasStock,
+      isInStock,
       availableStock: product.stock,
+      requestedQuantity: Number(quantity),
     });
+    return;
   } catch (error) {
     next(error);
   }

@@ -69,6 +69,7 @@ export const getReviews = async (
         limit,
       },
     });
+    return;
   } catch (error) {
     next(error);
   }
@@ -157,6 +158,7 @@ export const getReviewStats = async (
     };
 
     res.status(200).json(result);
+    return;
   } catch (error) {
     next(error);
   }
@@ -240,6 +242,7 @@ export const createReview = async (
       .lean();
 
     res.status(201).json(populatedReview);
+    return;
   } catch (error) {
     next(error);
   }
@@ -287,6 +290,7 @@ export const updateReview = async (
     await updateProductRating(review.productId.toString());
 
     res.status(200).json(updatedReview);
+    return;
   } catch (error) {
     next(error);
   }
@@ -323,6 +327,7 @@ export const deleteReview = async (
     await updateProductRating(productId);
 
     res.status(204).send();
+    return;
   } catch (error) {
     next(error);
   }
@@ -344,6 +349,7 @@ export const markReviewHelpful = async (
 
     await review.markAsHelpful();
     res.status(200).json({ helpfulVotes: review.helpfulVotes });
+    return;
   } catch (error) {
     next(error);
   }
@@ -369,6 +375,7 @@ export const reportReview = async (
       reportCount: review.reportCount,
       isVisible: review.isVisible,
     });
+    return;
   } catch (error) {
     next(error);
   }
