@@ -1,8 +1,8 @@
 {
   "scripts": {
     "dev": "nodemon src/index.ts",
-    "build": "npm install",
-    "start": "ts-node src/index.ts"
+    "build": "tsc",
+    "start": "NODE_OPTIONS='--max-old-space-size=2048' node dist/index.js"
   },
   "dependencies": {
     "@clerk/clerk-react": "^5.23.0",
